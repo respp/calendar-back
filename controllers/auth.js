@@ -86,10 +86,16 @@ const loginUser = async(req, res = response)=>{
     }
 }
 
-const renewToken = (req, res = response)=>{
+const renewToken = async(req, res = response)=>{
+    const { uid, name } = req
+
+    //generar un nuevo jwt
+    const token = await generateJWT(uid, name)
+    console.log(token)
+
     res.json({
         "ok":true,
-        msg:'renew'
+        token
     })
 }
 
