@@ -22,7 +22,7 @@ const createUser = async(req, res = response)=>{
 
         //hash
         const salt = bcrypt.genSaltSync()
-        user.password = bcrypt.hashSync(password, bcrypt.genSalt)
+        user.password = bcrypt.hashSync(password, salt)
     
         await user.save()
 
