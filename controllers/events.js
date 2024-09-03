@@ -27,7 +27,7 @@ const createEvent =async({ body, uid }, res = response)=>{
         })
         
     } catch (err) {
-        res.status(500).json({
+        return res.status(500).json({
             ok: false,
             msg: 'hable con el admin'
         })
@@ -68,8 +68,7 @@ const updateEvent = async({ body, params, uid }, res = response)=>{
 
         
     } catch (error) {
-        console.log(error)
-        res.status(500).json({
+        return res.status(500).json({
             ok: false,
             msg: "Hable con el admin"
         })
@@ -77,11 +76,40 @@ const updateEvent = async({ body, params, uid }, res = response)=>{
     }
 }
 
-const deleteEvent =({ body }, res = response)=>{
-    res.json({
-        ok: true,
-        msg: 'deleteEvent'
-    })
+const deleteEvent =async({ body, params, uid }, res = response)=>{
+    const eventId = params.id
+
+    try {
+        const event = await Event.findById( eventId )
+
+        if ( !event ){
+            res.status(404).json({
+                ok: false,
+                msg:'Evento no existe por ese id'
+            })
+        }
+
+        if ( event.user.toString() !== uid ){
+            res.status(401).json({
+                ok: false,
+                msg: 'No tiene privilegio de eliminar evento'
+            })
+        }
+
+        await Event.findByIdAndDelete( eventId )
+
+        res.json({
+            ok:true
+        })
+
+        
+    } catch (error) {
+        return res.status(500).json({
+            ok: false,
+            msg: "Hable con el admin"
+        })
+        
+    }
 }
 
 module.exports = {

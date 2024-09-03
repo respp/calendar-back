@@ -37,7 +37,7 @@ const createUser = async(req, res = response)=>{
         })
         
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             ok:false,
             msg:'por favor hable con el admin'
         })
@@ -79,7 +79,7 @@ const loginUser = async(req, res = response)=>{
         })
         
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             ok:false,
             msg:'por favor hable con el admin'
         })
