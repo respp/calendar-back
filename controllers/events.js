@@ -21,7 +21,7 @@ const createEvent =async({ body, uid }, res = response)=>{
 
         const eventSaved = await event.save()
 
-        res.json({
+        return res.json({
             ok: true,
             event: eventSaved
         })
@@ -41,14 +41,14 @@ const updateEvent = async({ body, params, uid }, res = response)=>{
         const event = await Event.findById( eventId )
 
         if ( !event ){
-            res.status(404).json({
+            return res.status(404).json({
                 ok: false,
                 msg:'Evento no existe por ese id'
             })
         }
 
         if ( event.user.toString() !== uid ){
-            res.status(401).json({
+            return res.status(401).json({
                 ok: false,
                 msg: 'No tiene privilegio de editar evento'
             })
@@ -61,7 +61,7 @@ const updateEvent = async({ body, params, uid }, res = response)=>{
 
         const eventUpdated = await Event.findByIdAndUpdate( eventId, newEvent, { new: true } )
 
-        res.json({
+        return res.json({
             ok:true,
             event: eventUpdated
         })
@@ -83,14 +83,14 @@ const deleteEvent =async({ body, params, uid }, res = response)=>{
         const event = await Event.findById( eventId )
 
         if ( !event ){
-            res.status(404).json({
+            return res.status(404).json({
                 ok: false,
                 msg:'Evento no existe por ese id'
             })
         }
 
         if ( event.user.toString() !== uid ){
-            res.status(401).json({
+            return res.status(401).json({
                 ok: false,
                 msg: 'No tiene privilegio de eliminar evento'
             })
@@ -98,7 +98,7 @@ const deleteEvent =async({ body, params, uid }, res = response)=>{
 
         await Event.findByIdAndDelete( eventId )
 
-        res.json({
+        return res.json({
             ok:true
         })
 
